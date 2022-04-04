@@ -20,7 +20,7 @@ const Welcome = () => {
           }}
         >
           <div
-            className="flex flex-row flex-wrap "
+            className="flex flex-row flex-wrap"
             style={
               {
                 // display: "flex",
@@ -36,13 +36,15 @@ const Welcome = () => {
                 flexWrap: "wrap",
                 justifyContent: "center",
                 alignItems: "center",
-                alignSelf: "center"
+                alignSelf: "center",
+                padding: "20px 50px 20px 50px"
               }}
             >
               <Article />
-              <hr />
               <Article />
-              <hr />
+              <Article />
+              <Article />
+              <Article />
               <Article />
             </div>
 
