@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "./../Banner";
 import { storage } from "../../Firebaseconfig";
 import {
@@ -11,20 +11,25 @@ import {
 const CreateArticle = () => {
   const [file, setFile] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const storage = getStorage();
   const storageRef = ref(storage);
 
+  useEffect(() => {
+    if (file !== "" && title !== "" && content !== "") {
+      setDisabled(false);
+    } else setDisabled(true);
+  }, [file, title, content]);
+
   const postBlog = imageUrl => {
     console.log("api calll started");
     const formData = new FormData();
-
     formData.append("title", title);
     formData.append("imageUrl", imageUrl);
     formData.append("content", content);
-
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/createpost", {
       method: "POST",
       body: formData
@@ -34,9 +39,16 @@ const CreateArticle = () => {
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        setFileLoading(false);
+        setFile("");
+        setContent("");
+        setTitle("");
       });
   };
   const createPost = async () => {
+    setFileLoading(true);
     const imagesRef = ref(storageRef, `${file.name}`);
     const uploadTask = uploadBytesResumable(imagesRef, file);
     uploadTask.on(
@@ -54,10 +66,11 @@ const CreateArticle = () => {
             break;
         }
       },
-      error => {},
+      error => {
+        setFileLoading(false);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          console.log("File available at", downloadURL);
           postBlog(downloadURL);
           setImageUrl(downloadURL);
         });
@@ -132,8 +145,9 @@ const CreateArticle = () => {
                     onClick={() => {
                       createPost();
                     }}
+                    disabled={disabled || fileLoading ? true : false}
                   >
-                    {fileLoading ? "loading......" : "Create Article"}
+                    {fileLoading ? "Loading...." : "Create Article"}
                   </button>
                 </div>
               </div>

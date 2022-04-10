@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Banner from "./../Banner";
 import Article from "./../Article";
 import PostContainer from "../../blog/container/PostContainer";
-
+import ResizeListner from "../../utility/ResizeListner";
+import "./index.css";
 const Welcome = () => {
+  const { width, height } = ResizeListner();
   const [allPosts, setAllPosts] = useState([]);
   const getAllPOsts = () => {
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/getposts", {
@@ -59,14 +61,12 @@ const Welcome = () => {
             <div
               style={{
                 display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-                alignSelf: "center",
                 padding: "20px 50px 20px 50px",
-                flexDirection: "column",
+                flexDirection: "row",
                 boxSizing: "border-box",
-                width: "100%"
+                width: "100%",
+                overflow: "scroll",
+                maxWidth: width
               }}
             >
               {/* {allPosts?.map((post, index) => (
@@ -76,20 +76,22 @@ const Welcome = () => {
               ))} */}
 
               {allPosts &&
-                allPosts.map(data => (
-                  <>
-                    <PostContainer
-                      imageSrc={data.imageUrl}
-                      title={data.title}
-                      content={data.content}
-                      date={data.date}
-                      onClick={() => {}}
-                    />
-                  </>
-                ))}
+                allPosts
+                  .map(data => (
+                    <>
+                      <PostContainer
+                        imageSrc={data.imageUrl}
+                        title={data.title}
+                        content={data.content}
+                        date={data.date}
+                        onClick={() => {}}
+                      />
+                    </>
+                  ))
+                  .reverse()}
             </div>
 
-            <nav className="flexbox mt-50 mb-50">
+            {/* <nav className="flexbox mt-50 mb-50">
               <p className="btn btn-white ">
                 <i className="ti-arrow-left fs-9 mr-4" /> Newer
               </p>
@@ -97,7 +99,7 @@ const Welcome = () => {
                 Older
                 <i className="ti-arrow-right fs-9 ml-4" />
               </p>
-            </nav>
+            </nav> */}
           </div>
         </div>
       </main>

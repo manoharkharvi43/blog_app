@@ -1,39 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { Redirect } from "react-router";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Welcome from "./components/Welcome";
-import Footer from "./components/Footer";
+import { ToastProvider } from "react-toast-notifications";
+import CreateArtice from "./components/CreateArticle";
 import Login from "./components/Login";
+import MyArticles from "./components/MyArticles";
+import Navbar from "./components/Navbar";
 import SignUp from "./components/SignUp/index";
 import SingleArticle from "./components/SingleArticle";
-import CreateArtice from "./components/CreateArticle";
+import Welcome from "./components/Welcome";
+import secureStorage from "./secureStorage";
 import * as serviceWorker from "./serviceWorker";
 
 const Main = withRouter(({ location }) => {
+  const [isAdmin, setIsAdmin] = useState("");
+  useEffect(() => {
+    const id = secureStorage.getItem("user-id");
+    setIsAdmin(id);
+    console.log(id, "id");
+  }, []);
+
+  useEffect(() => {
+    console.log(isAdmin, "isAdmin");
+  }, [isAdmin]);
+
   return (
     <div>
       {location.pathname !== "/login" && location.pathname !== "/signup" && (
-        <Navbar />
+        <Navbar
+          onClickLogout={() => {
+            setIsAdmin("");
+            window.location.reload();
+          }}
+        />
       )}
 
-      <Route exact path="/" component={Welcome} />
-      <Route path="/login" component={Login} />
-      <Route path="/article/:slug" component={SingleArticle} />
-      <Route path="/articles/create" component={CreateArtice} />
-      <Route path="/signup" component={SignUp} />
+      {isAdmin ? (
+        <>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/home" component={Welcome} />
+          <Route path="/article/:slug" component={SingleArticle} />
+          <Route path="/articles/create" component={CreateArtice} />
+          <Route path="/allarticles" component={MyArticles} />
+          <Route path="/signup" component={SignUp} />
+        </>
+      ) : (
+        <>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route
+            path="/login"
+            render={({ history }) => (
+              <Login
+                onLogin={() => {
+                  history.push("/home");
+                }}
+              ></Login>
+            )}
+          />
 
-      {location.pathname !== "/login" && location.pathname !== "/signup" && (
+          <Route exact path="/home" component={Welcome} />
+        </>
+      )}
+
+      {/* {location.pathname !== "/login" && location.pathname !== "/signup" && (
         <Footer />
-      )}
+      )} */}
     </div>
   );
 });
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Main />
-  </BrowserRouter>,
+  <ToastProvider>
+    <BrowserRouter>
+      <Main />
+    </BrowserRouter>
+  </ToastProvider>,
+
   document.getElementById("root")
 );
 
