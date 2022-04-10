@@ -13,14 +13,19 @@ function PostContainer({ imageSrc, title, content, date, onClick }) {
         borderRadius: 7,
         boxShadow:
           "rgb(50 50 93 / 25%) 0px 2px 5px -1px, rgb(0 0 0 / 30%) 0px 1px 3px -1px",
-        cursor: "pointer"
+        cursor: "pointer",
+        height: "100%"
       }}
       onClick={onClick}
     >
       <img
         src={imageSrc}
         style={{
-          objectFit: "cover"
+          objectFit: "cover",
+          width: width * 0.35,
+          height: width * 0.35,
+          minWidth: 200,
+          minHeight: 200
         }}
       />
       <div
@@ -55,6 +60,7 @@ function PostContainer({ imageSrc, title, content, date, onClick }) {
             color: "grey"
           }}
         >
+          {/* //convertDate */}
           {convertDate(date)}
         </p>
       </div>

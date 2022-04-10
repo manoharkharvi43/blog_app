@@ -64,7 +64,9 @@ const Welcome = () => {
                 alignItems: "center",
                 alignSelf: "center",
                 padding: "20px 50px 20px 50px",
-                flexDirection: "column"
+                flexDirection: "column",
+                boxSizing: "border-box",
+                width: "100%"
               }}
             >
               {/* {allPosts?.map((post, index) => (
