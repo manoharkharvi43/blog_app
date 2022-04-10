@@ -40,7 +40,9 @@ const Welcome = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+            boxSizing: "border-box",
+            width: "100%"
           }}
         >
           <div
@@ -78,19 +80,21 @@ const Welcome = () => {
                       imageSrc={data.imageUrl}
                       title={data.title}
                       content={data.content}
+                      date={data.date}
+                      onClick={() => {}}
                     />
                   </>
                 ))}
             </div>
 
             <nav className="flexbox mt-50 mb-50">
-              <a className="btn btn-white disabled">
+              <p className="btn btn-white ">
                 <i className="ti-arrow-left fs-9 mr-4" /> Newer
-              </a>
-              <a className="btn btn-white" href="#">
+              </p>
+              <p className="btn btn-white" href="#">
                 Older
                 <i className="ti-arrow-right fs-9 ml-4" />
-              </a>
+              </p>
             </nav>
           </div>
         </div>
