@@ -19,14 +19,16 @@ function PostContainer({ imageSrc, title, content, date, onClick }) {
       }}
       onClick={onClick}
     >
-      <img
-        src={imageSrc}
-        style={{
-          objectFit: "cover",
-          width: "100%",
-          height: "60%"
-        }}
-      />
+      {/* {imageSrc && (
+        <img
+          src={imageSrc}
+          style={{
+            objectFit: "cover",
+            width: "100%",
+            height: "60%"
+          }}
+        />
+      )} */}
       <div
         style={{
           display: "flex",
