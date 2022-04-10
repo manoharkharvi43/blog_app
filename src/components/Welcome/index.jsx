@@ -6,7 +6,7 @@ import PostContainer from "../../blog/container/PostContainer";
 const Welcome = () => {
   const [allPosts, setAllPosts] = useState([]);
   const getAllPOsts = () => {
-    fetch("http://192.168.0.109:8080/api/blog/getposts", {
+    fetch("https://gopal-blog-backend.herokuapp.com/api/blog/getposts", {
       method: "GET"
     })
       .then(res => res.json())

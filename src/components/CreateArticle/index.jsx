@@ -25,7 +25,7 @@ const CreateArticle = () => {
     formData.append("imageUrl", imageUrl);
     formData.append("content", content);
 
-    fetch("http://192.168.0.109:8080/api/blog/createpost", {
+    fetch("https://gopal-blog-backend.herokuapp.com/api/blog/createpost", {
       method: "POST",
       body: formData
     })
