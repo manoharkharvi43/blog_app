@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "./../Banner";
 import Article from "./../Article";
+import PostContainer from "../../blog/container/PostContainer";
 
 const Welcome = () => {
+  const [allPosts, setAllPosts] = useState([]);
+  const getAllPOsts = () => {
+    fetch("http://192.168.0.109:8080/api/blog/getposts", {
+      method: "GET"
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data, "data");
+        setAllPosts(data);
+      })
+      .catch(err => {
+        console.log(err, "err");
+      });
+  };
+
+  useEffect(() => {
+    getAllPOsts();
+  }, []);
+
+  useEffect(() => {
+    console.log(allPosts, "allPosts");
+  }, [allPosts]);
+
   return (
     <div>
       <Banner
@@ -37,15 +61,26 @@ const Welcome = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 alignSelf: "center",
-                padding: "20px 50px 20px 50px"
+                padding: "20px 50px 20px 50px",
+                flexDirection: "column"
               }}
             >
-              <Article />
-              <Article />
-              <Article />
-              <Article />
-              <Article />
-              <Article />
+              {/* {allPosts?.map((post, index) => (
+                <>
+                  
+                </>
+              ))} */}
+
+              {allPosts &&
+                allPosts.map(data => (
+                  <>
+                    <PostContainer
+                      imageSrc={data.imageUrl}
+                      title={data.title}
+                      content={data.content}
+                    />
+                  </>
+                ))}
             </div>
 
             <nav className="flexbox mt-50 mb-50">
