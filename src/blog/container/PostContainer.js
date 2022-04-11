@@ -1,7 +1,7 @@
 import React from "react";
 import { convertDate } from "../../utility/dateconvertor";
 import ResizeListner from "../../utility/ResizeListner";
-function PostContainer({ imageSrc, title, content, date, onClick }) {
+function PostContainer({ imageSrc = "", title, content, date, onClick }) {
   const { width, height } = ResizeListner();
   return (
     <div
@@ -19,7 +19,7 @@ function PostContainer({ imageSrc, title, content, date, onClick }) {
       }}
       onClick={onClick}
     >
-      {/* {imageSrc && (
+      {imageSrc !== "" && (
         <img
           src={imageSrc}
           style={{
@@ -28,7 +28,7 @@ function PostContainer({ imageSrc, title, content, date, onClick }) {
             height: "60%"
           }}
         />
-      )} */}
+      )}
       <div
         style={{
           display: "flex",
