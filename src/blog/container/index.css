@@ -1,0 +1,6 @@
+.pTag:hover {
+  color: dodgerblue;
+  padding: "5px 10px 5px 10px";
+  background-color: #ededed;
+  width: 100%;
+}

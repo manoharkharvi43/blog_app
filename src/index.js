@@ -4,6 +4,7 @@ import { Redirect } from "react-router";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
 import CreateArtice from "./components/CreateArticle";
+import Footer from "./components/Footer";
 import Login from "./components/Login";
 import MyArticles from "./components/MyArticles";
 import Navbar from "./components/Navbar";
@@ -12,17 +13,12 @@ import SingleArticle from "./components/SingleArticle";
 import Welcome from "./components/Welcome";
 import secureStorage from "./secureStorage";
 import * as serviceWorker from "./serviceWorker";
-
+import history from "./utility/history";
 const Main = withRouter(({ location }) => {
   const [isAdmin, setIsAdmin] = useState("");
   useEffect(() => {
     const id = secureStorage.getItem("user-id");
     setIsAdmin(id);
-    console.log(id, "id");
-  }, []);
-
-  useEffect(() => {
-    console.log(isAdmin, "isAdmin");
   }, [isAdmin]);
 
   return (
@@ -42,7 +38,7 @@ const Main = withRouter(({ location }) => {
             <Redirect to="/home" />
           </Route>
           <Route exact path="/home" component={Welcome} />
-          <Route path="/article/:slug" component={SingleArticle} />
+          <Route exact path="/article/:slug" component={SingleArticle} />
           <Route path="/articles/create" component={CreateArtice} />
           <Route path="/allarticles" component={MyArticles} />
           <Route path="/signup" component={SignUp} />
@@ -58,6 +54,7 @@ const Main = withRouter(({ location }) => {
               <Login
                 onLogin={() => {
                   history.push("/home");
+                  setIsAdmin("");
                 }}
               ></Login>
             )}
@@ -67,16 +64,14 @@ const Main = withRouter(({ location }) => {
         </>
       )}
 
-      {/* {location.pathname !== "/login" && location.pathname !== "/signup" && (
-        <Footer />
-      )} */}
+      {/* {location.pathname !== "home" && <Footer />} */}
     </div>
   );
 });
 
 ReactDOM.render(
   <ToastProvider>
-    <BrowserRouter>
+    <BrowserRouter history={history}>
       <Main />
     </BrowserRouter>
   </ToastProvider>,

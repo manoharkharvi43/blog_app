@@ -73,7 +73,7 @@ const Navbar = ({ onClickLogout }) => {
                 </Link>
               </li>
             )}
-            {isAdmin && (
+            {/* {isAdmin && (
               <>
                 {" "}
                 <li className="nav-item">
@@ -82,7 +82,7 @@ const Navbar = ({ onClickLogout }) => {
                   </a>
                 </li>
               </>
-            )}
+            )} */}
           </ul>
         </div>
       </div>

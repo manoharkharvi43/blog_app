@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PostContainer from "../../blog/container/PostContainer";
 import Banner from "../Banner";
-
+import CustomFullScreenLoader from "../../utility/FullScreenLoader";
+import ResizeListner from "../../utility/ResizeListner";
 function MyArticles() {
-  const { width, height } = useState("");
+  const { width, height } = ResizeListner();
   const [allPosts, setAllPosts] = useState([]);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const getAllPOsts = () => {
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/getposts", {
       method: "GET"
@@ -16,6 +18,23 @@ function MyArticles() {
       })
       .catch(err => {
         console.log(err, "err");
+      });
+  };
+
+  const deletePost = id => {
+    setLoadingDelete(true);
+    fetch(`https://gopal-blog-backend.herokuapp.com/api/blog/delete/${id}`, {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(data => {
+        getAllPOsts();
+      })
+      .catch(err => {
+        console.log(err, "err");
+      })
+      .finally(() => {
+        setLoadingDelete(false);
       });
   };
 
@@ -38,9 +57,10 @@ function MyArticles() {
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center"
+            justifyContent: width > 700 ? "flex-start" : "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+            alignSelf: "center"
           }}
         >
           {allPosts &&
@@ -52,6 +72,11 @@ function MyArticles() {
                     title={data.title}
                     content={data.content}
                     date={data.date}
+                    onClickDelete={data => {
+                      deletePost(data);
+                    }}
+                    isEditRequired={true}
+                    id={data._id}
                     onClick={() => {}}
                   />
                 </>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useToasts } from "react-toast-notifications";
 import secureStorage from "../../secureStorage";
-import { useHistory } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Banner from "./../Banner";
-import { storage } from "../../Firebaseconfig";
+import DOMPurify from "dompurify";
 import {
+  getDownloadURL,
   getStorage,
   ref,
-  uploadBytesResumable,
-  getDownloadURL
+  uploadBytesResumable
 } from "firebase/storage";
+import React, { useEffect, useState } from "react";
+import TextEditor from "../Editor";
+import Banner from "./../Banner";
+import { useToasts } from "react-toast-notifications";
 
 const CreateArticle = () => {
   const [file, setFile] = useState("");
@@ -17,6 +19,9 @@ const CreateArticle = () => {
   const [imageUrl, setImageUrl] = useState("");
   const storage = getStorage();
   const storageRef = ref(storage);
+  const [htmlData, setHtmlData] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const { addToast } = useToasts();
 
   useEffect(() => {
     if (file !== "" && title !== "" && content !== "") {
@@ -30,15 +35,25 @@ const CreateArticle = () => {
     formData.append("title", title);
     formData.append("imageUrl", imageUrl);
     formData.append("content", content);
+    formData.append("postBody", htmlData);
+
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/createpost", {
       method: "POST",
       body: formData
     })
       .then(data => {
         console.log(data);
+        if (data.status === 200) {
+          addToast(data.message, { appearance: "success" });
+        } else {
+          addToast(data.message, { appearance: "error" });
+        }
       })
       .catch(err => {
         console.log(err);
+        addToast("something went wrong try again later!", {
+          appearance: "error"
+        });
       })
       .finally(() => {
         setFileLoading(false);
@@ -79,6 +94,12 @@ const CreateArticle = () => {
 
     console.log(title, content, imageUrl, "      title, content, imageUrl");
   };
+
+  const createMarkup = html => {
+    return {
+      __html: DOMPurify.sanitize(html)
+    };
+  };
   return (
     <div>
       <Banner
@@ -92,8 +113,24 @@ const CreateArticle = () => {
           <div className="container">
             <div className="row">
               <div className="col-12 col-lg-12">
+                {showPreview && (
+                  <div
+                    className="preview"
+                    dangerouslySetInnerHTML={createMarkup(htmlData)}
+                  ></div>
+                )}
                 <div className="row">
                   <div className="form-group col-md-12 my-5">
+                    <p
+                      style={{
+                        color: "grey",
+                        fontSize: 15,
+                        margin: 0,
+                        padding: 0
+                      }}
+                    >
+                      Thumbnail Image
+                    </p>
                     <input
                       type="file"
                       className="form-control"
@@ -117,33 +154,35 @@ const CreateArticle = () => {
                       }}
                     />
                   </div>
-                  {/* <div className="form-group col-12 col-md-6">
-                      <select name id className="form-control form-control-lg">
-                        <option value>Select category</option>
-                        <option value>Vuejs</option>
-                        <option value>Reactjs</option>
-                      </select>
-                    </div> */}
                 </div>
                 <div className="form-group">
                   <textarea
                     className="form-control form-control-lg"
                     rows={4}
-                    placeholder="Content"
+                    placeholder="Description"
                     name="message"
                     defaultValue={""}
                     value={content}
                     onChange={val => {
                       setContent(val.target.value);
                     }}
+                    maxLength={70}
                   />
                 </div>
+                <TextEditor
+                  passHtml={data => {
+                    setHtmlData(data);
+                    console.log(data);
+                  }}
+                />
+
                 <div className="text-center">
                   <button
-                    className="btn btn-lg btn-primary"
+                    className="btn btn-lg btn-primary mt-10"
                     type={"submit"}
                     onClick={() => {
                       createPost();
+                      // setShowPreview(true);
                     }}
                     disabled={disabled || fileLoading ? true : false}
                   >

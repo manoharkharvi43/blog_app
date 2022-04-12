@@ -4,7 +4,7 @@ const Banner = ({ backgroundImage, subtitle, title }) => {
   return (
     <header
       className="header header-inverse"
-      style={{ backgroundImage }}
+      style={{ backgroundImage, height: "100vh" }}
       data-overlay={8}
     >
       <div className="container text-center">

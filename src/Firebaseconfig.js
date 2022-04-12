@@ -1,13 +1,6 @@
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/compat/app";
+import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyB_kP1GB5JvZafw5lW0xvKCHGNNtmIGjRY",
   authDomain: "blog-df720.firebaseapp.com",

@@ -3,6 +3,7 @@ import Banner from "./../Banner";
 import Article from "./../Article";
 import PostContainer from "../../blog/container/PostContainer";
 import ResizeListner from "../../utility/ResizeListner";
+import history from "../../utility/history";
 import "./index.css";
 const Welcome = () => {
   const { width, height } = ResizeListner();
@@ -25,16 +26,13 @@ const Welcome = () => {
     getAllPOsts();
   }, []);
 
-  useEffect(() => {
-    console.log(allPosts, "allPosts");
-  }, [allPosts]);
-
   return (
     <div>
       <Banner
         backgroundImage="url(assets/img/bg-gift.jpg)"
-        title="Latest Blog Posts"
-        subtitle="Read and get updated on the latest posts"
+        title="Hi Guys,"
+        subtitle="       Gopal Prasath here, if you have some time to spare on reading few
+        stories, which hopefully are interesting, scroll through."
       />
       <main className="main-content bg-gray">
         <div
@@ -47,17 +45,7 @@ const Welcome = () => {
             width: "100%"
           }}
         >
-          <div
-            className="flex flex-row flex-wrap"
-            style={
-              {
-                // display: "flex",
-                // justifyContent: "center",
-                // alignItems: "center",
-                // flexDirection: "column"
-              }
-            }
-          >
+          <div className="flex flex-row flex-wrap" style={{}}>
             <div
               style={{
                 display: "flex",
@@ -69,12 +57,6 @@ const Welcome = () => {
                 maxWidth: width
               }}
             >
-              {/* {allPosts?.map((post, index) => (
-                <>
-                  
-                </>
-              ))} */}
-
               {allPosts &&
                 allPosts
                   .map(data => (
@@ -84,22 +66,15 @@ const Welcome = () => {
                         title={data.title}
                         content={data.content}
                         date={data.date}
-                        onClick={() => {}}
+                        onClick={() => {
+                          history.push(`/article/${data.title}`);
+                        }}
+                        data={data}
                       />
                     </>
                   ))
                   .reverse()}
             </div>
-
-            {/* <nav className="flexbox mt-50 mb-50">
-              <p className="btn btn-white ">
-                <i className="ti-arrow-left fs-9 mr-4" /> Newer
-              </p>
-              <p className="btn btn-white" href="#">
-                Older
-                <i className="ti-arrow-right fs-9 ml-4" />
-              </p>
-            </nav> */}
           </div>
         </div>
       </main>
