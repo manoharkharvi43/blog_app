@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import ResizeListner from "../../utility/ResizeListner";
-import { EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Compressor from "compressorjs";
 import { convertToHTML } from "draft-convert";
-import "./index.css";
+import { EditorState } from "draft-js";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable
 } from "firebase/storage";
-import Compressor from "compressorjs";
-import { storage } from "../../Firebaseconfig";
+import React, { useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import ResizeListner from "../../utility/ResizeListner";
+import "./index.css";
 
 function TextEditor({ passHtml }) {
   const { width, height } = ResizeListner();
@@ -36,10 +35,11 @@ function TextEditor({ passHtml }) {
 
   const handleEditorChange = state => {
     setEditorState(state);
-    convertContentToHTML();
+    // convertContentToHTML(state);
+    passHtml(state);
   };
-  const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+  const convertContentToHTML = state => {
+    let currentContentAsHTML = convertToHTML(state.getCurrentContent());
     setConvertedContent(currentContentAsHTML);
     passHtml(currentContentAsHTML);
   };

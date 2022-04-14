@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { useToasts } from "react-toast-notifications";
+import { loginAction } from "../../redux/actions/loginAction";
 import secureStorage from "../../secureStorage";
 
 const Login = ({ onLogin }) => {
@@ -8,6 +11,8 @@ const Login = ({ onLogin }) => {
   const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const { addToast } = useToasts();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onClickLogin = () => {
     setLoading(true);
     const formData = new FormData();
@@ -22,8 +27,9 @@ const Login = ({ onLogin }) => {
         console.log(response);
         if (response.status === 200) {
           addToast(response.message, { appearance: "success" });
+          dispatch(loginAction());
           secureStorage.setItem("user-id", username);
-          onLogin();
+          navigate("/home");
         } else {
           addToast(response.message, { appearance: "error" });
         }

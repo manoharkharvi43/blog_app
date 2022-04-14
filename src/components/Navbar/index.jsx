@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import secureStorage from "../../secureStorage";
+import { useNavigate } from "react-router";
+import { connect, useDispatch } from "react-redux";
+import { loginAction, logoutAction } from "../../redux/actions/loginAction";
 
-const Navbar = ({ onClickLogout }) => {
-  const [isAdmin, setIsAdmin] = useState("");
-  useEffect(() => {
-    const id = secureStorage.getItem("user-id");
-    setIsAdmin(id);
-  }, []);
+const Navbar = ({ isAdmin }) => {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   return (
     <nav className="topbar topbar-inverse topbar-expand-md topbar-sticky">
       <div className="container">
@@ -35,7 +36,7 @@ const Navbar = ({ onClickLogout }) => {
             </li>
             {isAdmin && (
               <li className="nav-item">
-                <Link classname="nav-link" to="/articles/create">
+                <Link classname="nav-link" to="/article/create">
                   Write New Article
                 </Link>
               </li>
@@ -43,7 +44,7 @@ const Navbar = ({ onClickLogout }) => {
             {isAdmin && (
               <li className="nav-item">
                 <a className="nav-link">
-                  Hey Goapal!
+                  Hey Gopal!
                   <i className="fa fa-caret-down" />
                 </a>
                 <div className="nav-submenu">
@@ -58,7 +59,8 @@ const Navbar = ({ onClickLogout }) => {
                     className="nav-link"
                     onClick={() => {
                       secureStorage.clear();
-                      onClickLogout();
+                      navigate("/login");
+                      dispatch(logoutAction());
                     }}
                   >
                     Logout
@@ -90,4 +92,9 @@ const Navbar = ({ onClickLogout }) => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = state => {
+  return {
+    isAdmin: state.loginActionReducer.isLoggedIn
+  };
+};
+export default connect(mapStateToProps)(Navbar);

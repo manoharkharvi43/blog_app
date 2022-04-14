@@ -48,8 +48,9 @@ function PostContainer({
         <div>
           <BsThreeDotsVertical
             size={20}
-            onClick={() => {
+            onClick={e => {
               setOpenMenu(true);
+              e.stopPropagation();
             }}
           />
         </div>
@@ -154,13 +155,15 @@ function PostContainer({
           >
             Delete post
           </p>
-          {/* <div
+          <div
             style={{
-              height: 0,
-              backgroundColor: "grey",
-              width: "100%"
+              height: 0.5,
+              backgroundColor: "#f0f0f0",
+              width: "100%",
+              alignSelf: "center",
+              display: "flex"
             }}
-          ></div> */}
+          ></div>
         </div>
       )}
     </div>

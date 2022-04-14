@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes, useLocation } from "react-router";
+import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import CreateArticle from "../components/CreateArticle";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
@@ -8,28 +8,56 @@ import Navbar from "../components/Navbar";
 import SignUp from "../components/SignUp";
 import SingleArticle from "../components/SingleArticle";
 import Welcome from "../components/Welcome";
+import { Navigate, useLocation } from "react-router";
+import { connect, useDispatch } from "react-redux";
+import { loginAction } from "../redux/actions/loginAction";
+import secureStorage from "../secureStorage";
 
-function RouteIndex() {
+function RouteIndex({ isLoggedIn }) {
   const location = useLocation();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log(isLoggedIn, "isLoggedInisLoggedIn");
+    const id = secureStorage.getItem("user-id");
+    if (id) {
+      dispatch(loginAction());
+    }
+  }, []);
   return (
     <>
+      {location.pathname !== "/login" && location.pathname !== "/signup" && (
+        <Navbar />
+      )}
       <Routes>
-        {location.pathname !== "/login" && location.pathname !== "/signup" && (
-          <Navbar />
-        )}
-
-        <Route exact path="/" element={<Welcome />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/allarticles" element={<MyArticles />} />
-        <Route path="/article/:slug" element={<SingleArticle />} />
-        <Route path="/articles/create" element={<CreateArticle />} />
-        <Route path="/signup" element={<SignUp />} />
-        {location.pathname !== "/login" && location.pathname !== "/signup" && (
-          <Footer />
+        {isLoggedIn ? (
+          <>
+            {" "}
+            <Route exact path="/" element={<Navigate to="/home" />} />
+            <Route exact path="/home" element={<Welcome />} />
+            <Route path="/allarticles" element={<MyArticles />} />
+            <Route exact path="/article/:id" element={<SingleArticle />} />
+            <Route path="/article/create" element={<CreateArticle />} />
+            <Route path="/signup" element={<SignUp />} />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route exact path="/" element={<Navigate to="/home" />} />
+            <Route exact path="/home" element={<Welcome />} />
+          </>
         )}
       </Routes>
+      {/* {location.pathname !== "/login" && location.pathname !== "/signup" && (
+        <Footer />
+      )} */}
     </>
   );
 }
 
-export default RouteIndex;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.loginActionReducer.isLoggedIn
+  };
+};
+
+export default connect(mapStateToProps)(RouteIndex);

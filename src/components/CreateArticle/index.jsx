@@ -6,10 +6,13 @@ import {
   uploadBytesResumable
 } from "firebase/storage";
 import React, { useEffect, useState } from "react";
+import { useToasts } from "react-toast-notifications";
 import TextEditor from "../Editor";
 import Banner from "./../Banner";
-import { useToasts } from "react-toast-notifications";
-
+import { storage } from "../../Firebaseconfig";
+import { convertFromRaw } from "draft-js";
+import { convertToRaw } from "draft-js";
+import draftjsToHtml from "draftjs-to-html";
 const CreateArticle = () => {
   const [file, setFile] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
@@ -17,7 +20,7 @@ const CreateArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const storage = getStorage();
+  const storage = getStorage(storage);
   const storageRef = ref(storage);
   const [htmlData, setHtmlData] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -35,7 +38,10 @@ const CreateArticle = () => {
     formData.append("title", title);
     formData.append("imageUrl", imageUrl);
     formData.append("content", content);
-    formData.append("postBody", htmlData);
+    formData.append(
+      "postBody",
+      draftjsToHtml(convertToRaw(htmlData.getCurrentContent()))
+    );
 
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/createpost", {
       method: "POST",
@@ -44,7 +50,7 @@ const CreateArticle = () => {
       .then(data => {
         console.log(data);
         if (data.status === 200) {
-          addToast(data.message, { appearance: "success" });
+          addToast("new post created successfully", { appearance: "success" });
         } else {
           addToast(data.message, { appearance: "error" });
         }
@@ -95,6 +101,16 @@ const CreateArticle = () => {
     console.log(title, content, imageUrl, "      title, content, imageUrl");
   };
 
+  useEffect(() => {
+    {
+      showPreview &&
+        console.log(
+          convertToRaw(htmlData.getCurrentContent()),
+          "convertToRaw(htmlData.getCurrentContent())"
+        );
+    }
+  }, [showPreview]);
+
   const createMarkup = html => {
     return {
       __html: DOMPurify.sanitize(html)
@@ -113,12 +129,14 @@ const CreateArticle = () => {
           <div className="container">
             <div className="row">
               <div className="col-12 col-lg-12">
-                {showPreview && (
+                {/* {showPreview && (
                   <div
-                    className="preview"
-                    dangerouslySetInnerHTML={createMarkup(htmlData)}
-                  ></div>
-                )}
+                    disabled
+                    dangerouslySetInnerHTML={createMarkup(
+                      draftjsToHtml(convertToRaw(htmlData.getCurrentContent()))
+                    )}
+                  />
+                )} */}
                 <div className="row">
                   <div className="form-group col-md-12 my-5">
                     <p
@@ -182,7 +200,6 @@ const CreateArticle = () => {
                     type={"submit"}
                     onClick={() => {
                       createPost();
-                      // setShowPreview(true);
                     }}
                     disabled={disabled || fileLoading ? true : false}
                   >

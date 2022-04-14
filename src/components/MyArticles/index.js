@@ -3,9 +3,11 @@ import PostContainer from "../../blog/container/PostContainer";
 import Banner from "../Banner";
 import CustomFullScreenLoader from "../../utility/FullScreenLoader";
 import ResizeListner from "../../utility/ResizeListner";
+import { useNavigate } from "react-router";
 function MyArticles() {
   const { width, height } = ResizeListner();
   const [allPosts, setAllPosts] = useState([]);
+  const navigate = useNavigate();
   const [loadingDelete, setLoadingDelete] = useState(false);
   const getAllPOsts = () => {
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/getposts", {
@@ -57,7 +59,7 @@ function MyArticles() {
         <div
           style={{
             display: "flex",
-            justifyContent: width > 700 ? "flex-start" : "center",
+            justifyContent: width > 700 ? "center" : "center",
             alignItems: "center",
             flexWrap: "wrap",
             alignSelf: "center"
@@ -77,7 +79,12 @@ function MyArticles() {
                     }}
                     isEditRequired={true}
                     id={data._id}
-                    onClick={() => {}}
+                    onClick={() => {
+                      navigate(`/article/${data.title}`, {
+                        state: data
+                      });
+                    }}
+                    data={data}
                   />
                 </>
               ))

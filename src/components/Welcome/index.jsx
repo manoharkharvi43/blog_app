@@ -3,11 +3,14 @@ import Banner from "./../Banner";
 import Article from "./../Article";
 import PostContainer from "../../blog/container/PostContainer";
 import ResizeListner from "../../utility/ResizeListner";
-import history from "../../utility/history";
 import "./index.css";
+import { useNavigate } from "react-router";
+
 const Welcome = () => {
   const { width, height } = ResizeListner();
   const [allPosts, setAllPosts] = useState([]);
+
+  const navigate = useNavigate();
   const getAllPOsts = () => {
     fetch("https://gopal-blog-backend.herokuapp.com/api/blog/getposts", {
       method: "GET"
@@ -67,7 +70,9 @@ const Welcome = () => {
                         content={data.content}
                         date={data.date}
                         onClick={() => {
-                          history.push(`/article/${data.title}`);
+                          navigate(`/article/${data.title}`, {
+                            state: data
+                          });
                         }}
                         data={data}
                       />
