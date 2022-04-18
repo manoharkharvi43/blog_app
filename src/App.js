@@ -4,14 +4,23 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "./redux/store";
 import RouteIndex from "./routes/route";
-
+import "./index.css";
 function App() {
   const history = createBrowserHistory();
   return (
     <>
       <Provider store={store}>
         <BrowserRouter history={history}>
-          <RouteIndex />
+          <div
+            style={
+              {
+                // backgroundColor: "#e6ba95"
+              }
+            }
+            className="element"
+          >
+            <RouteIndex />
+          </div>
         </BrowserRouter>
       </Provider>
     </>

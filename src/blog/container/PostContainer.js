@@ -37,10 +37,11 @@ function PostContainer({
         maxWidth: 500,
         borderRadius: 7,
         boxShadow:
-          "rgb(50 50 93 / 25%) 0px 2px 5px -1px, rgb(0 0 0 / 30%) 0px 1px 3px -1px",
+          "rgb(50 50 93 / 25%) 0px 13px 27px -5px, rgb(0 0 0 / 30%) 0px 8px 16px -8px",
         cursor: "pointer",
         // height: height * 0.4
-        position: "relative"
+        position: "relative",
+        backgroundColor: "white"
       }}
       onClick={() => onClick(data)}
     >

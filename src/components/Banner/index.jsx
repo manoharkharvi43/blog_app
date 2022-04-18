@@ -1,11 +1,10 @@
 import React from "react";
-
 const Banner = ({ backgroundImage, subtitle, title }) => {
   return (
     <header
       className="header header-inverse"
-      style={{ backgroundImage, height: "100vh" }}
-      data-overlay={8}
+      style={{ backgroundImage, opacity: 1, objectFit: "cover" }}
+      // data-overlay={8}
     >
       <div className="container text-center">
         <div className="row">

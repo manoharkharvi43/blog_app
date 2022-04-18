@@ -44,6 +44,7 @@ function RouteIndex({ isLoggedIn }) {
             <Route path="/login" element={<Login />} />
             <Route exact path="/" element={<Navigate to="/home" />} />
             <Route exact path="/home" element={<Welcome />} />
+            <Route exact path="/article/:id" element={<SingleArticle />} />
           </>
         )}
       </Routes>
