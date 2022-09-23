@@ -17,7 +17,6 @@ const SingleArticle = ({ blogData }) => {
   };
   useEffect(() => {
     setData(location.state);
-    console.log(location.state, "location.state");
   }, [location]);
   return (
     <div>

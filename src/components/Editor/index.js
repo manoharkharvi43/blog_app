@@ -14,9 +14,6 @@ import ResizeListner from "../../utility/ResizeListner";
 import "./index.css";
 
 function TextEditor({ passHtml }) {
-  const { width, height } = ResizeListner();
-
-  const [file, setFile] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
   //   const [disabled, setDisabled] = useState(true);
   const [title, setTitle] = useState("");
@@ -37,11 +34,6 @@ function TextEditor({ passHtml }) {
     setEditorState(state);
     // convertContentToHTML(state);
     passHtml(state);
-  };
-  const convertContentToHTML = state => {
-    let currentContentAsHTML = convertToHTML(state.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
-    passHtml(currentContentAsHTML);
   };
 
   const handleCompressedUpload = e => {
